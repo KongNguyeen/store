@@ -1,0 +1,177 @@
+
+    /* Custom CSS for Product Edit Form */
+    .card {
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        border: none;
+    }
+    
+    .card:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transform: translateY(-5px);
+    }
+    
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+        background-color: #f8f9fa;
+    }
+    
+    .card-title {
+        font-weight: 600;
+        color: #344767;
+        position: relative;
+        padding-bottom: 10px;
+    }
+    
+    .card-title:after {
+        content: '';
+        position: absolute;
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, #5e72e4 0%, #825ee4 100%);
+        bottom: 0;
+        left: 0;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 7px;
+        padding: 10px 15px;
+        border: 1px solid #e9ecef;
+        transition: all 0.2s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.25);
+        border-color: #5e72e4;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(90deg, #5e72e4 0%, #825ee4 100%);
+        border: none;
+        box-shadow: 0 4px 10px rgba(94, 114, 228, 0.4);
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(94, 114, 228, 0.5);
+    }
+    
+    .btn-outline-primary {
+        border-color: #5e72e4;
+        color: #5e72e4;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline-primary:hover {
+        background-color: #5e72e4;
+        box-shadow: 0 4px 10px rgba(94, 114, 228, 0.4);
+    }
+    
+    .attribute-row {
+        transition: all 0.3s ease;
+        padding: 10px;
+        border-radius: 7px;
+    }
+    
+    .attribute-row:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .remove-attribute {
+        opacity: 0.7;
+        transition: all 0.2s ease;
+    }
+    
+    .attribute-row:hover .remove-attribute {
+        opacity: 1;
+    }
+    
+    #existingImages .img-container, 
+    #imagePreview .img-container {
+        overflow: hidden;
+        border-radius: 7px;
+        position: relative;
+    }
+    
+    #existingImages img, 
+    #imagePreview img {
+        transition: transform 0.3s ease;
+    }
+    
+    #existingImages .img-container:hover img, 
+    #imagePreview .img-container:hover img {
+        transform: scale(1.05);
+    }
+    
+    .badge.bg-primary {
+        background: linear-gradient(90deg, #5e72e4 0%, #825ee4 100%) !important;
+    }
+    
+    /* Custom checkbox */
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+    
+    .form-check-input:checked {
+        background-color: #5e72e4;
+        border-color: #5e72e4;
+    }
+    
+    .form-check-label {
+        cursor: pointer;
+    }
+    
+    /* Animation for alerts */
+    .alert {
+        animation: slideDown 0.5s ease forwards;
+        border-radius: 10px;
+    }
+    
+    @keyframes slideDown {
+        0% { opacity: 0; transform: translateY(-20px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Custom file input styling */
+    .custom-file-input {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 100px;
+        border: 2px dashed #ccc;
+        border-radius: 10px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background-color: #f8f9fa;
+    }
+    
+    .custom-file-input:hover {
+        border-color: #5e72e4;
+    }
+    
+    .custom-file-input input[type="file"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+    
+    .custom-file-input .icon {
+        font-size: 24px;
+        color: #5e72e4;
+        margin-top: 20px;
+    }
+    
+    .custom-file-input .text {
+        display: block;
+        margin-top: 10px;
+        color: #6c757d;
+    }

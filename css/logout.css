@@ -1,0 +1,354 @@
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --logout-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            --animation-duration: 0.8s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { width: 80px; height: 80px; left: 10%; animation-delay: -1s; }
+        .particle:nth-child(2) { width: 60px; height: 60px; left: 20%; animation-delay: -2s; }
+        .particle:nth-child(3) { width: 40px; height: 40px; left: 30%; animation-delay: -3s; }
+        .particle:nth-child(4) { width: 100px; height: 100px; left: 40%; animation-delay: -4s; }
+        .particle:nth-child(5) { width: 50px; height: 50px; left: 50%; animation-delay: -5s; }
+        .particle:nth-child(6) { width: 70px; height: 70px; left: 60%; animation-delay: -1.5s; }
+        .particle:nth-child(7) { width: 90px; height: 90px; left: 70%; animation-delay: -2.5s; }
+        .particle:nth-child(8) { width: 30px; height: 30px; left: 80%; animation-delay: -3.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .logout-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: slideInUp var(--animation-duration) ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logout-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logout-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--logout-gradient);
+        }
+
+        .logout-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: var(--logout-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounceIn 1s ease-out 0.5s both;
+            box-shadow: 0 10px 30px rgba(250, 112, 154, 0.3);
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .logout-icon i {
+            font-size: 3rem;
+            color: white;
+            animation: rotateOut 1s ease-in-out 1.5s both;
+        }
+
+        @keyframes rotateOut {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(180deg);
+            }
+        }
+
+        .logout-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            animation: fadeInUp var(--animation-duration) ease-out 0.8s both;
+        }
+
+        .logout-message {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            animation: fadeInUp var(--animation-duration) ease-out 1s both;
+        }
+
+        .logout-user {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp var(--animation-duration) ease-out 1.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-container {
+            margin: 2rem 0;
+            animation: fadeInUp var(--animation-duration) ease-out 1.4s both;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            background: var(--primary-gradient);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .loading-text {
+            font-size: 1rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .btn-login {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            animation: fadeInUp var(--animation-duration) ease-out 1.6s both;
+            opacity: 0;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .btn-login.show {
+            opacity: 1;
+        }
+
+        .success-icon {
+            display: none;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            background: var(--success-gradient);
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            animation: successBounce 0.6s ease-out;
+        }
+
+        .success-icon.show {
+            display: flex;
+        }
+
+        @keyframes successBounce {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .goodbye-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            font-weight: 700;
+            color: #000000;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            z-index: 5;
+            animation: goodbyeEffect 5s ease-in-out;
+        }
+
+        @keyframes goodbyeEffect {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            5% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            15% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            85% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            95% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1.5);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logout-card {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            
+            .logout-icon {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .logout-icon i {
+                font-size: 2.5rem;
+            }
+            
+            .logout-title {
+                font-size: 2rem;
+            }
+            
+            .logout-message {
+                font-size: 1.1rem;
+            }
+        }

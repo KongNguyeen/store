@@ -1,0 +1,1 @@
+user_id|i:2;role_id|i:2;role|s:4:"user";full_name|s:19:"Nguyễn Văn Công";avatar|s:35:"assets/uploads/avatars/avatar_2.jpg";login_time|i:1757404805;csrf_token|s:64:"81d5345244ad425f32d8e44a028b3d04ef4aff70ab0ae2ec951eebbc0f9807bd";csrf_time|i:1757404805;post_login_redirect|s:9:"index.php";flash|a:1:{s:7:"success";s:35:"Đã xóa địa chỉ thành công";}

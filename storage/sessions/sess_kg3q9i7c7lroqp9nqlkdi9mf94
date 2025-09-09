@@ -1,0 +1,1 @@
+user_id|i:1;role_id|i:1;role|s:5:"admin";full_name|s:5:"Admin";avatar|s:39:"assets/uploads/avatars/admin_avatar.jpg";login_time|i:1757398078;csrf_token|s:64:"cdd025f1e462f7de13ecdd68769323dc1a3e5aa8448c1a56288422982b42c526";csrf_time|i:1757398078;post_login_redirect|s:15:"admin/index.php";last_activity|i:1757403962;
