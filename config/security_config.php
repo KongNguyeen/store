@@ -3,7 +3,7 @@
 // CẢNH BÁO: CHỈ SỬ DỤNG CHO TESTING, KHÔNG BAO GIỜ DÙNG TRONG PRODUCTION!
 
 // Cài đặt cách lưu mật khẩu
-define('USE_PLAIN_PASSWORD', true); // true = lưu text, false = hash (khuyến khích)
+define('USE_PLAIN_PASSWORD', false); // true = lưu text, false = hash (khuyến khích)
 
 // Nếu bạn muốn an toàn hơn, đặt false
 // define('USE_PLAIN_PASSWORD', false);

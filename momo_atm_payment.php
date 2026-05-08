@@ -101,10 +101,14 @@ try {
         if (isset($jsonResult['localMessage'])) {
             echo "Local Message: " . htmlspecialchars($jsonResult['localMessage']) . "<br>";
         }
-        echo "<h3>Response details:</h3>";
-        echo "<pre>";
-        print_r($jsonResult);
-        echo "</pre>";
+        if (defined('APP_DEBUG') && APP_DEBUG) {
+            echo "<h3>Response details:</h3>";
+            echo "<pre>";
+            print_r($jsonResult);
+            echo "</pre>";
+        } else {
+            echo "<p>Vui lòng thử lại sau hoặc liên hệ hỗ trợ.</p>";
+        }
         echo "<p><a href='checkout.php'>Quay lại trang thanh toán</a></p>";
     }
 } catch (Exception $e) {

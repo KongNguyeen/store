@@ -282,6 +282,14 @@
     transition: all 0.2s ease;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .chatbot-widget,
+    .chatbot-widget * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
 .chatbot-send:hover {
     transform: scale(1.05);
 }

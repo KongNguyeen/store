@@ -56,8 +56,7 @@ $status_history = $stmt->fetchAll();
 // Xử lý hủy đơn hàng
 if (isset($_POST['cancel_order']) && $order['status'] == 'pending') {
     // Validate CSRF token
-    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || 
-        $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    if (!isset($_POST['csrf_token']) || !verify_csrf_token($_POST['csrf_token'])) {
         flash('error', 'Invalid CSRF token');
     } else {
         try {

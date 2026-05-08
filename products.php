@@ -263,13 +263,13 @@ include 'includes/navbar.php';
                                     <div class="col-md-4" style="animation-delay: <?= $index * 0.1 ?>s">
                                         <div class="card product-card h-100">
                                             <?php if ($product['product_image']): ?>
-                                                <img src="<?= $product['product_image'] ?>" 
-                                                     class="card-img-top product-image" 
-                                                     alt="<?= htmlspecialchars($product['name']) ?>">
+                                                   <img src="<?= $product['product_image'] ?>" 
+                                                       class="card-img-top product-image" 
+                                                       alt="<?= htmlspecialchars($product['name']) ?>" loading="lazy" decoding="async">
                                             <?php else: ?>
-                                                <img src="assets/images/no-image.jpg" 
-                                                     class="card-img-top product-image" 
-                                                     alt="No image">
+                                                   <img src="assets/images/no-image.jpg" 
+                                                       class="card-img-top product-image" 
+                                                       alt="No image" loading="lazy" decoding="async">
                                             <?php endif; ?>
                                             <div class="card-body product-body">
                                                 <p class="product-category mb-2">
@@ -321,15 +321,15 @@ include 'includes/navbar.php';
                                         <div class="row align-items-center">
                                             <div class="col-md-2">
                                                 <?php if ($product['product_image']): ?>
-                                                    <img src="<?= $product['product_image'] ?>" 
-                                                         class="img-fluid rounded" 
-                                                         alt="<?= htmlspecialchars($product['name']) ?>"
-                                                         style="height: 120px; object-fit: cover;">
+                                                      <img src="<?= $product['product_image'] ?>" 
+                                                          class="img-fluid rounded" 
+                                                          alt="<?= htmlspecialchars($product['name']) ?>"
+                                                          style="height: 120px; object-fit: cover;" loading="lazy" decoding="async">
                                                 <?php else: ?>
-                                                    <img src="assets/images/no-image.jpg" 
-                                                         class="img-fluid rounded" 
-                                                         alt="No image"
-                                                         style="height: 120px; object-fit: cover;">
+                                                      <img src="assets/images/no-image.jpg" 
+                                                          class="img-fluid rounded" 
+                                                          alt="No image"
+                                                          style="height: 120px; object-fit: cover;" loading="lazy" decoding="async">
                                                 <?php endif; ?>
                                             </div>
                                             <div class="col-md-7">
@@ -928,116 +928,6 @@ window.addEventListener('beforeunload', function() {
     document.body.style.transform = 'scale(0.98)';
 });
 
-// Add CSS for additional animations
-const additionalStyles = `
-.focused {
-    transform: translateY(-2px);
-}
-
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
-    transform: scale(0);
-    animation: ripple-effect 0.6s linear;
-    pointer-events: none;
-}
-
-@keyframes ripple-effect {
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
-}
-
-@keyframes slideInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-.quick-view-modal::-webkit-scrollbar {
-    width: 6px;
-}
-
-.quick-view-modal::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 3px;
-}
-
-.quick-view-modal::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
-}
-
-.quick-view-modal::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
-
-/* Mobile optimizations */
-@media (max-width: 768px) {
-    .filter-sidebar {
-        padding: 1.5rem;
-    }
-    
-    .toolbar {
-        padding: 1rem;
-    }
-    
-    .toolbar .d-flex {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
-    }
-    
-    .product-card {
-        margin-bottom: 1.5rem;
-    }
-    
-    .list-item {
-        padding: 1rem;
-    }
-    
-    .list-item .row {
-        text-align: center;
-    }
-    
-    .list-item .col-md-2,
-    .list-item .col-md-7,
-    .list-item .col-md-3 {
-        margin-bottom: 1rem;
-    }
-}
-
-/* Print styles */
-@media print {
-    .filter-sidebar,
-    .toolbar,
-    .pagination {
-        display: none;
-    }
-    
-    .products-container {
-        background: white !important;
-    }
-    
-    .product-card {
-        break-inside: avoid;
-        box-shadow: none;
-        border: 1px solid #ddd;
-    }
-}
-`;
 
 // Toast message function for different types
 function showToast(message, type = 'info', duration = 5000) {
@@ -1082,10 +972,6 @@ function showToast(message, type = 'info', duration = 5000) {
     }, duration);
 }
 
-// Inject additional styles
-const styleSheet = document.createElement('style');
-styleSheet.textContent = additionalStyles;
-document.head.appendChild(styleSheet);
 </script>
 
 <?php include 'includes/footer.php'; ?>

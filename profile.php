@@ -20,17 +20,16 @@ $user = $stmt->fetch();
 
 // Xử lý thêm/sửa địa chỉ
 if (isset($_POST['save_address'])) {
-    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || 
-        $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    if (!isset($_POST['csrf_token']) || !verify_csrf_token($_POST['csrf_token'])) {
         flash('error', 'Invalid CSRF token');
     } else {
         $address_id = (int)($_POST['address_id'] ?? 0);
-        $recipient_name = sanitize($_POST['recipient_name'] ?? '');
-        $phone = sanitize($_POST['phone'] ?? '');
-        $address_line = sanitize($_POST['address_line'] ?? '');
-        $ward = sanitize($_POST['ward'] ?? '');
-        $district = sanitize($_POST['district'] ?? '');
-        $city = sanitize($_POST['city'] ?? '');
+        $recipient_name = trim($_POST['recipient_name'] ?? '');
+        $phone = trim($_POST['phone'] ?? '');
+        $address_line = trim($_POST['address_line'] ?? '');
+        $ward = trim($_POST['ward'] ?? '');
+        $district = trim($_POST['district'] ?? '');
+        $city = trim($_POST['city'] ?? '');
 
         try {
             if (!$recipient_name || !$phone || !$address_line || !$ward || !$district || !$city) {
@@ -97,8 +96,7 @@ if (isset($_POST['save_address'])) {
 
 // Xử lý xóa địa chỉ
 if (isset($_POST['delete_address'])) {
-    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || 
-        $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    if (!isset($_POST['csrf_token']) || !verify_csrf_token($_POST['csrf_token'])) {
         flash('error', 'Invalid CSRF token');
     } else {
         $address_id = (int)($_POST['address_id'] ?? 0);

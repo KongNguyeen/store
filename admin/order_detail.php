@@ -205,7 +205,7 @@ $error = flash('error');
                                                     <?php if (!empty($item['product_image'])): ?>
                                                         <img src="<?= $item['product_image'] ?>" 
                                                              alt="<?= sanitize($item['name'] ?? 'Sản phẩm') ?>" 
-                                                             class="product-image">
+                                                             class="product-image" loading="lazy" decoding="async">
                                                     <?php else: ?>
                                                         <div class="product-image d-flex align-items-center justify-content-center bg-light">
                                                             <i class="fas fa-image text-muted"></i>

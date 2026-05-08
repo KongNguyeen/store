@@ -549,13 +549,20 @@ if (!isset($pdo) || $pdo === null) {
     color: #007bff;
     font-weight: 600;
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .navbar * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm" id="mainNavbar">
     <div class="container">
         <a class="navbar-brand" href="<?= BASE_URL ?>"><?= SITE_NAME ?></a>
         
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 

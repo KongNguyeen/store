@@ -1,15 +1,32 @@
 <?php
-// Debug error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../config/functions.php';
+
+// Debug error reporting
+if (defined('APP_DEBUG') && APP_DEBUG) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+} else {
+    error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
+    ini_set('display_errors', 0);
+}
 
 header('Content-Type: application/json');
 
-// Enable CORS
-header('Access-Control-Allow-Origin: *');
+// Allow same-origin CORS requests only
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowed_origin = '';
+if ($origin) {
+    $origin_host = parse_url($origin, PHP_URL_HOST);
+    $server_host = $_SERVER['HTTP_HOST'] ?? '';
+    if ($origin_host && $server_host && strcasecmp($origin_host, $server_host) === 0) {
+        $allowed_origin = $origin;
+    }
+}
+if ($allowed_origin) {
+    header('Access-Control-Allow-Origin: ' . $allowed_origin);
+    header('Vary: Origin');
+}
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
@@ -42,8 +59,9 @@ try {
     $message = trim($input['message'] ?? '');
     $user_id = $_SESSION['user_id'] ?? null;
     
-    // Log để debug
-    error_log("Chatbot received message: " . $message);
+    if (defined('APP_DEBUG') && APP_DEBUG) {
+        error_log("Chatbot received message: " . $message);
+    }
     
     if (!$message) {
         throw new Exception('Tin nhắn không được để trống');
@@ -52,8 +70,9 @@ try {
     // Phân tích tin nhắn để tìm hiểu ý định của người dùng
     $intent = analyzeUserIntent($message, $pdo);
     
-    // Log intent để debug
-    error_log("Analyzed intent: " . json_encode($intent));
+    if (defined('APP_DEBUG') && APP_DEBUG) {
+        error_log("Analyzed intent: " . json_encode($intent));
+    }
     
     $response = generateResponse($pdo, $message, $intent, $user_id);
     

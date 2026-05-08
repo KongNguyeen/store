@@ -99,14 +99,15 @@
     </footer>
 
     <!-- Back to Top Button -->
-    <button class="back-to-top" id="backToTop">
+    <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
     <script>
         // Back to Top functionality
         const backToTopButton = document.getElementById('backToTop');
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         
         // Show/hide back to top button
         window.addEventListener('scroll', function() {
@@ -117,37 +118,11 @@
             }
         });
         
-        // Smooth scroll to top
+        // Scroll to top
         backToTopButton.addEventListener('click', function() {
             window.scrollTo({
                 top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // Animate elements on scroll
-        function animateOnScroll() {
-            const elements = document.querySelectorAll('.footer-section');
-            const windowHeight = window.innerHeight;
-            
-            elements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                
-                if (elementTop < windowHeight - 100) {
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }
-            });
-        }
-
-        // Social links hover effects
-        document.querySelectorAll('.social-link').forEach(link => {
-            link.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-3px) scale(1.1) rotate(5deg)';
-            });
-            
-            link.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1) rotate(0deg)';
+                behavior: prefersReducedMotion ? 'auto' : 'smooth'
             });
         });
 
@@ -168,6 +143,7 @@
 
         // Add ripple effect to clickable elements
         function createRipple(event) {
+            if (prefersReducedMotion) return;
             const button = event.currentTarget;
             const circle = document.createElement('span');
             const diameter = Math.max(button.clientWidth, button.clientHeight);
@@ -186,52 +162,11 @@
             button.appendChild(circle);
         }
 
-        // Add ripple styles
-        const style = document.createElement('style');
-        style.textContent = `
-            .ripple {
-                position: absolute;
-                border-radius: 50%;
-                background-color: rgba(255, 255, 255, 0.3);
-                transform: scale(0);
-                animation: ripple-animation 0.6s linear;
-                pointer-events: none;
-            }
-            
-            @keyframes ripple-animation {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
-            }
-            
-            @keyframes bounce {
-                0%, 20%, 50%, 80%, 100% {
-                    transform: translateY(0);
-                }
-                40% {
-                    transform: translateY(-10px);
-                }
-                60% {
-                    transform: translateY(-5px);
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
         // Apply ripple effect to social links
         document.querySelectorAll('.social-link').forEach(link => {
             link.addEventListener('click', createRipple);
         });
 
-        // Initialize animations
-        window.addEventListener('scroll', animateOnScroll);
-        window.addEventListener('load', animateOnScroll);
-
-        // Add loading animation for footer
-        window.addEventListener('load', function() {
-            document.querySelector('.footer').style.opacity = '1';
-        });
     </script>
 </body>
 </html>

@@ -133,11 +133,16 @@ if ($total_amount < 10000 || $total_amount > 50000000) {
 // Xử lý đặt hàng
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate CSRF token
-    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || 
-        $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    if (!isset($_POST['csrf_token']) || !verify_csrf_token($_POST['csrf_token'])) {
         $error = 'Invalid CSRF token';
     } else {
-        $payment_method = sanitize($_POST['payment_method']);
+        $payment_method = trim($_POST['payment_method'] ?? '');
+        if (!$payment_method || !array_key_exists($payment_method, PAYMENT_METHODS)) {
+            $error = 'Phương thức thanh toán không hợp lệ';
+        }
+    }
+
+    if (!$error) {
         
         // Nếu chọn MoMo, chuyển hướng đến trang thanh toán MoMo
         if ($payment_method === 'momo') {
@@ -180,12 +185,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ");
                     $stmt->execute([
                         $user_id,
-                        sanitize($_POST['recipient_name']),
-                        sanitize($_POST['phone']),
-                        sanitize($_POST['address_line']),
-                        sanitize($_POST['ward']),
-                        sanitize($_POST['district']),
-                        sanitize($_POST['city'])
+                        trim($_POST['recipient_name'] ?? ''),
+                        trim($_POST['phone'] ?? ''),
+                        trim($_POST['address_line'] ?? ''),
+                        trim($_POST['ward'] ?? ''),
+                        trim($_POST['district'] ?? ''),
+                        trim($_POST['city'] ?? '')
                     ]);
                     $address_id = $pdo->lastInsertId();
                 } else {
@@ -207,7 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $total,
                     $discount,
                     $payment_method,
-                    sanitize($_POST['shipping_method'])
+                    trim($_POST['shipping_method'] ?? '')
                 ]);
                 $order_id = $pdo->lastInsertId();
 
@@ -259,15 +264,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ward, district, city, is_default
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, 0)
                 ");
-                $stmt->execute([
-                    $user_id,
-                    sanitize($_POST['recipient_name']),
-                    sanitize($_POST['phone']),
-                    sanitize($_POST['address_line']),
-                    sanitize($_POST['ward']),
-                    sanitize($_POST['district']),
-                    sanitize($_POST['city'])
-                ]);
+                    $stmt->execute([
+                        $user_id,
+                        trim($_POST['recipient_name'] ?? ''),
+                        trim($_POST['phone'] ?? ''),
+                        trim($_POST['address_line'] ?? ''),
+                        trim($_POST['ward'] ?? ''),
+                        trim($_POST['district'] ?? ''),
+                        trim($_POST['city'] ?? '')
+                    ]);
                 $address_id = $pdo->lastInsertId();
             } else {
                 $address_id = (int)$_POST['address_id'];
@@ -291,7 +296,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $total,
                 $discount,
                 $payment_method,
-                sanitize($_POST['shipping_method'])
+                trim($_POST['shipping_method'] ?? '')
             ]);
             $order_id = $pdo->lastInsertId();
 

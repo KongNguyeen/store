@@ -12,7 +12,15 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
     
     // Set session cookie parameters
     $lifetime = 30 * 24 * 60 * 60; // 30 days
-    session_set_cookie_params($lifetime, '/', '', false, true);
+    $is_secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    session_set_cookie_params([
+        'lifetime' => $lifetime,
+        'path' => '/',
+        'domain' => '',
+        'secure' => $is_secure,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
     
     // Set session save path and start session
     session_save_path($session_path);
@@ -21,6 +29,7 @@ if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
 
 
 // Site configuration
+define('APP_DEBUG', false);
 define('SITE_NAME', 'KongNguyeen');
 define('BASE_URL', '/store/');
 

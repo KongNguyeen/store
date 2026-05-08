@@ -88,21 +88,21 @@ include 'includes/navbar.php';
     </div>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" class="d-block w-100" alt="Summer Sale">
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" class="d-block w-100" alt="Summer Sale" loading="eager" decoding="async">
             <div class="carousel-caption d-none d-md-block">
                 <h2>🌟 Khuyến mãi mùa hè</h2>
                 <p>Giảm giá lên đến 50% cho các sản phẩm mới nhất</p>
             </div>
         </div>
         <div class="carousel-item">
-            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80" class="d-block w-100" alt="Free Shipping">
+            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80" class="d-block w-100" alt="Free Shipping" loading="lazy" decoding="async">
             <div class="carousel-caption d-none d-md-block">
                 <h2>🚚 Miễn phí vận chuyển</h2>
                 <p>Cho đơn hàng từ 500,000đ trên toàn quốc</p>
             </div>
         </div>
         <div class="carousel-item">
-            <img src="https://images.unsplash.com/photo-1560472355-536de3962603?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2126&q=80" class="d-block w-100" alt="New Member">
+            <img src="https://images.unsplash.com/photo-1560472355-536de3962603?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2126&q=80" class="d-block w-100" alt="New Member" loading="lazy" decoding="async">
             <div class="carousel-caption d-none d-md-block">
                 <h2>🎁 Ưu đãi thành viên mới</h2>
                 <p>Giảm ngay 100,000đ cho đơn hàng đầu tiên</p>
@@ -138,7 +138,7 @@ include 'includes/navbar.php';
                                 <a href="category.php?id=<?= $category['category_id'] ?>" class="text-decoration-none d-flex align-items-center">
                                     <div class="category-icon me-3">
                                         <?php if ($category['category_image']): ?>
-                                            <img src="<?= $category['category_image'] ?>" alt="<?= htmlspecialchars($category['name']) ?>" class="img-fluid rounded" style="width: 40px; height: 40px; object-fit: cover;">
+                                            <img src="<?= $category['category_image'] ?>" alt="<?= htmlspecialchars($category['name']) ?>" class="img-fluid rounded" style="width: 40px; height: 40px; object-fit: cover;" loading="lazy" decoding="async">
                                         <?php else: ?>
                                             <div class="category-icon-placeholder">
                                                 <i class="fas fa-folder"></i>
@@ -178,9 +178,9 @@ include 'includes/navbar.php';
                 <div class="card product-card">
                     <div class="product-image-container">
                         <?php if ($product['product_image']): ?>
-                            <img src="<?= $product['product_image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="card-img-top">
+                            <img src="<?= $product['product_image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="card-img-top" loading="lazy" decoding="async">
                         <?php else: ?>
-                            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="<?= htmlspecialchars($product['name']) ?>" class="card-img-top">
+                            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="<?= htmlspecialchars($product['name']) ?>" class="card-img-top" loading="lazy" decoding="async">
                         <?php endif; ?>
                         <div class="product-badge">New</div>
                     </div>
@@ -229,9 +229,9 @@ include 'includes/navbar.php';
                     <div class="card product-card">
                         <div class="product-image-container">
                             <?php if ($product['product_image']): ?>
-                                <img src="<?= $product['product_image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="card-img-top">
+                                <img src="<?= $product['product_image'] ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="card-img-top" loading="lazy" decoding="async">
                             <?php else: ?>
-                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="<?= htmlspecialchars($product['name']) ?>" class="card-img-top">
+                                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="<?= htmlspecialchars($product['name']) ?>" class="card-img-top" loading="lazy" decoding="async">
                             <?php endif; ?>
                             <div class="product-badge">Best Seller</div>
                         </div>

@@ -60,17 +60,22 @@ $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate CSRF token
-    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || 
-        $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    if (!isset($_POST['csrf_token']) || !verify_csrf_token($_POST['csrf_token'])) {
         $error = 'Invalid CSRF token';
     } else {
         // Validate input
-        $name = sanitize($_POST['name'] ?? '');
-        $description = sanitize($_POST['description'] ?? '');
+        $name = trim($_POST['name'] ?? '');
+        $description = trim($_POST['description'] ?? '');
         $parent_id = (int)($_POST['parent_id'] ?? 0);
+        $max_description_length = 500;
+        $description_length = function_exists('mb_strlen') ? mb_strlen($description) : strlen($description);
         
         if (!$name) {
             $error = 'Vui lòng nhập tên danh mục';
+        } elseif ($description_length > $max_description_length) {
+            $error = 'Mô tả không được vượt quá ' . $max_description_length . ' ký tự';
+        } elseif ($parent_id && !isset($categories_map[$parent_id])) {
+            $error = 'Danh mục cha không hợp lệ';
         } else {
             try {
                 // Kiểm tra tên danh mục đã tồn tại chưa
@@ -116,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- SweetAlert2 CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.32/sweetalert2.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href=".../css/categories_add.css">
+    <link rel="stylesheet" href="../css/categories_add.css">
 
 </head>
 <body>

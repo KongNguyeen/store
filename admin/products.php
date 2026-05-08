@@ -305,8 +305,8 @@ if (!isset($_SESSION['csrf_token'])) {
                                         }
                                     }
                                     ?>
-                                    <img src="<?= htmlspecialchars($imagePath) ?>"
-                                         class="product-image me-3" alt="<?= htmlspecialchars($product['name']) ?>">
+                                     <img src="<?= htmlspecialchars($imagePath) ?>"
+                                         class="product-image me-3" alt="<?= htmlspecialchars($product['name']) ?>" loading="lazy" decoding="async">
                                     <div>
                                         <h6 class="mb-1 fw-bold"><?= htmlspecialchars($product['name']) ?></h6>
                                         <p class="text-muted mb-0 small">ID: #<?= $product['product_id'] ?></p>
@@ -414,14 +414,14 @@ if (!isset($_SESSION['csrf_token'])) {
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" defer></script>
     
     <!-- SheetJS (xlsx) for Excel Export -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" defer></script>
     
     <!-- html2canvas and jsPDF for better printing/PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 
     <script>
         // Lấy CSRF token từ PHP và gán vào window

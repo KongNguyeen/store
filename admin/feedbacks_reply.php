@@ -8,8 +8,7 @@ header('Content-Type: application/json');
 $response = ['success' => false, 'message' => ''];
 
 // Validate CSRF token
-if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || 
-    $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+if (!isset($_POST['csrf_token']) || !verify_csrf_token($_POST['csrf_token'])) {
     $response['message'] = 'Invalid CSRF token';
     echo json_encode($response);
     exit;
@@ -17,7 +16,7 @@ if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) ||
 
 // Validate input
 $feedback_id = (int)($_POST['feedback_id'] ?? 0);
-$reply = sanitize($_POST['reply'] ?? '');
+$reply = trim($_POST['reply'] ?? '');
 $status = $_POST['status'] ?? '';
 
 if (!$feedback_id || !$reply || !$status) {

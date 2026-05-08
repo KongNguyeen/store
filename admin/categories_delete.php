@@ -7,12 +7,18 @@ header('Content-Type: application/json');
 
 $response = ['success' => false, 'message' => ''];
 
-// Nhận dữ liệu từ POST hoặc GET
-$category_id = isset($_POST['id']) ? (int)$_POST['id'] : (isset($_GET['id']) ? (int)$_GET['id'] : 0);
-$csrf_token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    $response['message'] = 'Method not allowed';
+    echo json_encode($response);
+    exit;
+}
+
+// Nhận dữ liệu từ POST
+$category_id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+$csrf_token = $_POST['csrf_token'] ?? '';
 
 // Kiểm tra CSRF token
-if (!isset($_SESSION['csrf_token']) || $csrf_token !== $_SESSION['csrf_token']) {
+if (!isset($_POST['csrf_token']) || !verify_csrf_token($csrf_token)) {
     $response['message'] = 'Invalid CSRF token';
     echo json_encode($response);
     exit;

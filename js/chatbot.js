@@ -1,13 +1,12 @@
 // Prevent multiple definitions
 if (typeof window.ChatbotAI !== 'undefined') {
-    console.log('ChatbotAI already defined, skipping...');
+    // Chatbot already defined, skip redefinition.
 } else {
 
 class ChatbotAI {
     constructor() {
         // Prevent multiple instances
         if (window.chatbotAIInstance) {
-            console.log('ChatbotAI instance already exists');
             return window.chatbotAIInstance;
         }
         
@@ -32,9 +31,6 @@ class ChatbotAI {
             const adminChatWidget = document.getElementById('chatWidget');
             const chatbotWidget = document.querySelector('.chatbot-widget');
             
-            console.log('Admin chat widget:', adminChatWidget);
-            console.log('Chatbot widget:', chatbotWidget);
-            
             if (chatbotWidget) {
                 if (adminChatWidget) {
                     // Nếu có admin chat, đặt chatbot AI ở bên trái
@@ -43,8 +39,6 @@ class ChatbotAI {
                     chatbotWidget.style.right = 'auto';
                     chatbotWidget.style.bottom = '20px';
                     chatbotWidget.style.display = 'block';
-                    
-                    console.log('Positioned chatbot on left side');
                     
                     // Thêm label AI
                     if (!chatbotWidget.querySelector('.ai-label')) {
@@ -74,7 +68,6 @@ class ChatbotAI {
                     chatbotWidget.style.bottom = '20px';
                     chatbotWidget.style.display = 'block';
                     
-                    console.log('Positioned chatbot on right side');
                 }
             }
         }, 100);
@@ -91,17 +84,17 @@ class ChatbotAI {
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <div class="chatbot-messages" id="chatbotMessages">
+                <div class="chatbot-messages" id="chatbotMessages" role="log" aria-live="polite" aria-relevant="additions">
                     <!-- Messages will be added here -->
                 </div>
                 <div class="chatbot-input">
-                    <input type="text" id="chatbotInput" placeholder="Nhập câu hỏi của bạn...">
-                    <button class="chatbot-send" id="chatbotSend">
+                    <input type="text" id="chatbotInput" placeholder="Nhập câu hỏi của bạn..." aria-label="Nhap cau hoi" autocomplete="off">
+                    <button class="chatbot-send" id="chatbotSend" type="button" aria-label="Gui tin nhan">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
             </div>
-            <button class="chatbot-trigger" id="chatbotTrigger">
+            <button class="chatbot-trigger" id="chatbotTrigger" type="button" aria-label="Mo tro ly AI">
                 <i class="fas fa-robot"></i>
             </button>
         `;
@@ -207,7 +200,8 @@ class ChatbotAI {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: message })
+                body: JSON.stringify({ message: message }),
+                credentials: 'same-origin'
             });
             
             const data = await response.json();
@@ -255,6 +249,8 @@ class ChatbotAI {
                             <img src="${product.product_image || 'assets/img/no-image.png'}" 
                                  alt="${this.escapeHtml(product.name)}" 
                                  class="product-image"
+                                   loading="lazy"
+                                   decoding="async"
                                  onerror="this.src='assets/img/no-image.png'">
                             <div class="product-name">${this.escapeHtml(product.name)}</div>
                             <div class="product-price">${this.formatPrice(product.price)}đ</div>
@@ -269,7 +265,7 @@ class ChatbotAI {
             suggestionsHtml = `
                 <div class="suggestions">
                     ${suggestions.map((suggestion, index) => `
-                        <button class="suggestion-btn" data-suggestion="${this.escapeHtml(suggestion)}" onclick="chatbot.handleSuggestionClick(this)">${this.escapeHtml(suggestion)}</button>
+                        <button class="suggestion-btn" type="button" data-suggestion="${this.escapeHtml(suggestion)}" aria-label="Goi y: ${this.escapeHtml(suggestion)}" onclick="chatbot.handleSuggestionClick(this)">${this.escapeHtml(suggestion)}</button>
                     `).join('')}
                 </div>
             `;
@@ -354,9 +350,16 @@ class ChatbotAI {
 
 // Initialize chatbot when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    // Only initialize if not already initialized
-    if (!window.chatbot) {
-        window.chatbot = new ChatbotAI();
+    const initChatbot = () => {
+        if (!window.chatbot) {
+            window.chatbot = new ChatbotAI();
+        }
+    };
+
+    if ('requestIdleCallback' in window) {
+        requestIdleCallback(initChatbot, { timeout: 2000 });
+    } else {
+        setTimeout(initChatbot, 500);
     }
 });
 

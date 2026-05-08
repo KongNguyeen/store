@@ -522,6 +522,7 @@ include 'includes/navbar.php';
 ?>
 
 <link rel="stylesheet" href="css/cart.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
 <div class="page-wrapper">
     <div class="cart-container">
@@ -551,13 +552,13 @@ include 'includes/navbar.php';
                                     <div class="col-md-5">
                                         <div class="d-flex align-items-center">
                                             <?php if ($item['product']['product_image']): ?>
-                                                <img src="<?= $item['product']['product_image'] ?>" 
-                                                     class="product-image me-3"
-                                                     alt="<?= htmlspecialchars($item['product']['name']) ?>">
+                                                   <img src="<?= $item['product']['product_image'] ?>" 
+                                                       class="product-image me-3"
+                                                       alt="<?= htmlspecialchars($item['product']['name']) ?>" loading="lazy" decoding="async">
                                             <?php else: ?>
-                                                <img src="assets/images/no-image.jpg" 
-                                                     class="product-image me-3"
-                                                     alt="No image">
+                                                   <img src="assets/images/no-image.jpg" 
+                                                       class="product-image me-3"
+                                                       alt="No image" loading="lazy" decoding="async">
                                             <?php endif; ?>
                                             <div class="product-info">
                                                 <h6>
@@ -896,130 +897,6 @@ function showCustomConfirm(title, message, confirmText, cancelText) {
         document.body.appendChild(modalBackdrop);
         document.body.appendChild(modalContainer);
         
-        // Add CSS for the modal
-        const modalStyle = document.createElement('style');
-        modalStyle.textContent = `
-            .custom-modal-backdrop {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                backdrop-filter: blur(5px);
-                z-index: 9999;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                animation: fadeIn 0.3s ease-out;
-            }
-            
-            .custom-modal-container {
-                background: white;
-                border-radius: 15px;
-                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-                width: 90%;
-                max-width: 400px;
-                overflow: hidden;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                z-index: 10001;
-                margin: 0 !important;
-            }
-            
-            .custom-modal-header {
-                padding: 1rem 1.5rem;
-                border-bottom: 1px solid #f0f0f0;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-            }
-            
-            .custom-modal-header h5 {
-                margin: 0;
-                font-weight: 600;
-            }
-            
-            .custom-modal-close {
-                background: transparent;
-                border: none;
-                color: white;
-                font-size: 1.2rem;
-                cursor: pointer;
-                opacity: 0.8;
-                transition: all 0.3s ease;
-            }
-            
-            .custom-modal-close:hover {
-                opacity: 1;
-                transform: scale(1.1);
-            }
-            
-            .custom-modal-body {
-                padding: 1.5rem;
-            }
-            
-            .custom-modal-icon {
-                font-size: 3rem;
-                color: #f56565;
-                animation: shake 0.8s ease-in-out;
-            }
-            
-            .custom-modal-footer {
-                padding: 1rem 1.5rem;
-                border-top: 1px solid #f0f0f0;
-                display: flex;
-                justify-content: flex-end;
-                gap: 10px;
-            }
-            
-            .custom-modal-btn-cancel {
-                background: #f1f1f1;
-                color: #666;
-                border: none;
-                border-radius: 10px;
-                padding: 0.5rem 1.5rem;
-                font-weight: 500;
-                transition: all 0.3s ease;
-            }
-            
-            .custom-modal-btn-cancel:hover {
-                background: #e5e5e5;
-                transform: translateY(-2px);
-            }
-            
-            .custom-modal-btn-confirm {
-                background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
-                color: white;
-                border: none;
-                border-radius: 10px;
-                padding: 0.5rem 1.5rem;
-                font-weight: 500;
-                transition: all 0.3s ease;
-            }
-            
-            .custom-modal-btn-confirm:hover {
-                background: linear-gradient(135deg, #ee5a5a, #e03131);
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(238, 90, 90, 0.3);
-            }
-            
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            
-            @keyframes shake {
-                0%, 100% { transform: rotate(0deg); }
-                10%, 30%, 50%, 70%, 90% { transform: rotate(-5deg); }
-                20%, 40%, 60%, 80% { transform: rotate(5deg); }
-            }
-        `;
-        document.head.appendChild(modalStyle);
         
         // Event listeners
         const closeBtn = modalContainer.querySelector('.custom-modal-close');
@@ -1060,14 +937,6 @@ function showCustomConfirm(title, message, confirmText, cancelText) {
 
 // Enhanced animations and interactions
 document.addEventListener('DOMContentLoaded', function() {
-    // Add Animate.css if not already included
-    if (!document.querySelector('link[href*="animate.css"]')) {
-        const animateCSS = document.createElement('link');
-        animateCSS.rel = 'stylesheet';
-        animateCSS.href = 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css';
-        document.head.appendChild(animateCSS);
-    }
-    
     // Add smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -1113,41 +982,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Add CSS animation keyframes
-const animationStyle = document.createElement('style');
-animationStyle.textContent = `
-    @keyframes fadeOut {
-        to {
-            opacity: 0;
-            transform: translateX(-100px);
-        }
-    }
-    
-    @keyframes pulse {
-        0%, 100% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.05);
-        }
-    }
-    
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-        20%, 40%, 60%, 80% { transform: translateX(5px); }
-    }
-    
-    @keyframes glow {
-        0%, 100% {
-            box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
-        }
-        50% {
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
-        }
-    }
-`;
-document.head.appendChild(animationStyle);
 
 // Add notification system
 function showNotification(message, type = 'success') {
@@ -1163,72 +997,6 @@ function showNotification(message, type = 'success') {
         </div>
     `;
     
-    // Add notification styles
-    const notificationStyle = document.createElement('style');
-    notificationStyle.textContent = `
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            animation: slideInRight 0.5s ease-out;
-            max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        .notification-success {
-            background: linear-gradient(135deg, #48bb78, #38a169);
-        }
-        
-        .notification-error {
-            background: linear-gradient(135deg, #f56565, #e53e3e);
-        }
-        
-        .notification-warning {
-            background: linear-gradient(135deg, #ed8936, #dd6b20);
-        }
-        
-        .notification-content {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .notification-close {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            padding: 0;
-            margin-left: auto;
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-        
-        .notification-close:hover {
-            opacity: 1;
-        }
-        
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    `;
-    
-    if (!document.querySelector('#notification-styles')) {
-        notificationStyle.id = 'notification-styles';
-        document.head.appendChild(notificationStyle);
-    }
     
     document.body.appendChild(notification);
     

@@ -1,5 +1,5 @@
 <?php
-require_once 'config/config.php';
+require_once 'middleware/admin_auth.php';
 
 echo "<h2>Debug Thanh Toán MoMo</h2>";
 

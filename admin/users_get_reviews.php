@@ -4,8 +4,7 @@ require_once '../config/config.php';
 require_once '../config/functions.php';
 
 // Validate CSRF token
-if (!isset($_GET['csrf_token']) || !isset($_SESSION['csrf_token']) || 
-    $_GET['csrf_token'] !== $_SESSION['csrf_token']) {
+if (!isset($_GET['csrf_token']) || !verify_csrf_token($_GET['csrf_token'])) {
     die('Invalid CSRF token');
 }
 
@@ -53,10 +52,10 @@ try {
                         <div class="flex-shrink-0">
                             <?php if ($review['product_image']): ?>
                                 <img src="<?= $review['product_image'] ?>" 
-                                     class="avatar avatar-sm rounded-circle me-3">
+                                     class="avatar avatar-sm rounded-circle me-3" loading="lazy" decoding="async">
                             <?php else: ?>
                                 <img src="../assets/images/no-image.jpg" 
-                                     class="avatar avatar-sm rounded-circle me-3">
+                                     class="avatar avatar-sm rounded-circle me-3" loading="lazy" decoding="async">
                             <?php endif; ?>
                         </div>
                         <div class="flex-grow-1">

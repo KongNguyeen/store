@@ -92,7 +92,7 @@ include 'includes/navbar.php';
                         <img src="<?= $product['product_image'] ?: 'assets/images/no-image.jpg' ?>" 
                              class="card-img-top" 
                              alt="<?= htmlspecialchars($product['name']) ?>"
-                             loading="lazy">
+                                loading="lazy" decoding="async">
                         <div class="product-overlay">
                             <a href="product.php?id=<?= $product['product_id'] ?>" class="quick-view-btn">
                                 <i class="fas fa-info-circle"></i> Xem chi tiết
