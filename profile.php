@@ -170,19 +170,32 @@ if (isset($_POST['update_profile'])) {
                 // Upload avatar nếu có
                 if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
                     $file = $_FILES['avatar'];
-                    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-                    
-                    if (!in_array($ext, ['jpg', 'jpeg', 'png'])) {
-                        throw new Exception('Avatar phải là file ảnh (jpg, jpeg, png)');
-                    }
 
                     if ($file['size'] > MAX_FILE_SIZE) {
                         throw new Exception('Kích thước file không được vượt quá ' . (MAX_FILE_SIZE / 1024 / 1024) . 'MB');
                     }
 
+                    if (!is_uploaded_file($file['tmp_name'])) {
+                        throw new Exception('File upload không hợp lệ');
+                    }
+
+                    $allowed_mime_map = [
+                        'image/jpeg' => 'jpg',
+                        'image/png' => 'png',
+                    ];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mime_type = $finfo ? finfo_file($finfo, $file['tmp_name']) : null;
+                    if ($finfo) {
+                        finfo_close($finfo);
+                    }
+
+                    if (!$mime_type || !isset($allowed_mime_map[$mime_type])) {
+                        throw new Exception('Avatar phải là file ảnh hợp lệ (jpg, jpeg, png)');
+                    }
+
                     $upload_dir = ROOT_PATH . 'assets/uploads/avatars/';
                     if (!is_dir($upload_dir)) {
-                        mkdir($upload_dir, 0777, true);
+                        mkdir($upload_dir, 0755, true);
                     }
 
                     // Đảm bảo thư mục có quyền ghi
@@ -190,10 +203,12 @@ if (isset($_POST['update_profile'])) {
                         throw new Exception('Không thể ghi vào thư mục upload. Vui lòng kiểm tra quyền truy cập.');
                     }
 
-                    $filename = 'avatar_' . $user_id . '.' . $ext;
+                    $filename = 'avatar_' . $user_id . '_' . bin2hex(random_bytes(8)) . '.' . $allowed_mime_map[$mime_type];
                     $destination = $upload_dir . $filename;
 
                     if (move_uploaded_file($file['tmp_name'], $destination)) {
+                        @chmod($destination, 0644);
+
                         // Xóa avatar cũ nếu có
                         if ($user['avatar'] && file_exists(ROOT_PATH . $user['avatar']) && $user['avatar'] != 'assets/images/avatar-default.jpg') {
                             unlink(ROOT_PATH . $user['avatar']);

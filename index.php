@@ -57,10 +57,10 @@ $best_sellers = $pdo->query("
 // Lấy khuyến mãi đang chạy
 $promotions = $pdo->query("
     SELECT * FROM promotions 
-    WHERE active = 1
+    WHERE status = 'active'
     AND start_date <= NOW() 
     AND end_date >= NOW()
-    ORDER BY discount_percent DESC
+    ORDER BY discount_value DESC
     LIMIT 3
 ")->fetchAll();
 
@@ -288,10 +288,12 @@ include 'includes/navbar.php';
                     <div class="card promotion-card">
                         <div class="card-body">
                             <div class="discount-badge">
-                                <?= $promo['discount_percent'] ?>% OFF
+                                <?= ($promo['discount_type'] ?? 'percentage') === 'percentage' 
+                                    ? number_format($promo['discount_value']) . '% OFF' 
+                                    : format_currency($promo['discount_value']) . ' OFF' ?>
                             </div>
                             <h5 class="card-title">
-                                <?= htmlspecialchars($promo['description']) ?: 'Giảm giá đặc biệt' ?>
+                                <?= htmlspecialchars($promo['promotion_code'] ?? 'Giảm giá đặc biệt') ?>
                             </h5>
                             <p class="text-muted mb-3">
                                 <i class="fas fa-clock me-2"></i>
@@ -303,9 +305,9 @@ include 'includes/navbar.php';
                                     Đơn tối thiểu: <?= format_currency($promo['min_order_amount']) ?>
                                 </p>
                             <?php endif; ?>
-                            <?php if ($promo['code']): ?>
-                                <div class="promotion-code" onclick="copyToClipboard('<?= $promo['code'] ?>')">
-                                    <?= $promo['code'] ?>
+                            <?php if (!empty($promo['promotion_code'])): ?>
+                                <div class="promotion-code" onclick="copyToClipboard('<?= $promo['promotion_code'] ?>')">
+                                    <?= $promo['promotion_code'] ?>
                                 </div>
                             <?php endif; ?>
                         </div>

@@ -69,47 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Số lượng tồn kho không hợp lệ';
         } else {
             try {
-                $pdo->beginTransaction();
-
-                // Cập nhật thông tin sản phẩm
-                $stmt = $pdo->prepare("
-                    UPDATE products 
-                    SET name = ?, description = ?, price = ?, stock = ?, 
-                        category_id = ?, supplier_id = ?, status = ?, updated_at = NOW()
-                    WHERE product_id = ?
-                ");
-                $stmt->execute([
-                    $name, $description, $price, $stock,
-                    $category_id, $supplier_id, $status, $product_id
-                ]);
-
-                // Xóa thuộc tính cũ
-                $stmt = $pdo->prepare("DELETE FROM product_attributes WHERE product_id = ?");
-                $stmt->execute([$product_id]);
-
-                // Thêm thuộc tính mới
-                if (isset($_POST['attributes']) && is_array($_POST['attributes'])) {
-                    $stmt = $pdo->prepare("
-                        INSERT INTO product_attributes (product_id, attribute_name, attribute_value)
-                        VALUES (?, ?, ?)
-                    ");
-                    foreach ($_POST['attributes'] as $attr) {
-                        if (!empty($attr['name']) && !empty($attr['value'])) {
-                            $stmt->execute([
-                                $product_id,
-                                sanitize($attr['name']),
-                                sanitize($attr['value'])
-                            ]);
-                        }
-                    }
-                }
-
                 // Xử lý xóa ảnh
                 if (isset($_POST['delete_images']) && is_array($_POST['delete_images'])) {
-                    $stmt = $pdo->prepare("
-                        DELETE FROM product_images 
-                        WHERE product_id = ? AND image_id = ?
-                    ");
+                    $stmt = $pdo->prepare("\n                        DELETE FROM product_images \n                        WHERE product_id = ? AND image_id = ?\n                    ");
                     foreach ($_POST['delete_images'] as $image_id) {
                         // Lấy đường dẫn ảnh trước khi xóa
                         $img_stmt = $pdo->prepare("SELECT image_url FROM product_images WHERE image_id = ?");
@@ -128,36 +90,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (isset($_FILES['images']) && is_array($_FILES['images']['name'])) {
                     $upload_dir = PRODUCT_IMG_PATH . $product_id;
                     if (!is_dir($upload_dir)) {
-                        mkdir($upload_dir, 0777, true);
+                        mkdir($upload_dir, 0755, true);
                     }
 
-                    $stmt = $pdo->prepare("
-                        INSERT INTO product_images (product_id, image_url, is_primary)
-                        VALUES (?, ?, ?)
-                    ");
+                    $allowed_mime_map = [
+                        'image/jpeg' => 'jpg',
+                        'image/png' => 'png',
+                        'image/gif' => 'gif',
+                    ];
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+
+                    $stmt = $pdo->prepare("\n                        INSERT INTO product_images (product_id, image_url, is_primary)\n                        VALUES (?, ?, ?)\n                    ");
 
                     foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-                        if ($_FILES['images']['error'][$key] === UPLOAD_ERR_OK) {
-                            $file_name = $_FILES['images']['name'][$key];
-                            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-                            
-                            if (!in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif'])) {
-                                continue;
-                            }
-
-                            $new_name = uniqid() . '.' . $file_ext;
-                            $destination = $upload_dir . '/' . $new_name;
-
-                            if (move_uploaded_file($tmp_name, $destination)) {
-                                // Kiểm tra xem có ảnh nào không, nếu chưa có thì set là ảnh chính
-                                $img_count_stmt = $pdo->prepare("SELECT COUNT(*) FROM product_images WHERE product_id = ?");
-                                $img_count_stmt->execute([$product_id]);
-                                $is_primary = ($img_count_stmt->fetchColumn() === 0) ? 1 : 0;
-                                
-                                $image_url = str_replace(ROOT_PATH, '', $destination);
-                                $stmt->execute([$product_id, $image_url, $is_primary]);
-                            }
+                        if ($_FILES['images']['error'][$key] !== UPLOAD_ERR_OK) {
+                            continue;
                         }
+
+                        $file_size = (int)($_FILES['images']['size'][$key] ?? 0);
+                        if ($file_size <= 0 || $file_size > MAX_FILE_SIZE || !is_uploaded_file($tmp_name)) {
+                            continue;
+                        }
+
+                        $mime_type = $finfo ? finfo_file($finfo, $tmp_name) : null;
+                        if (!$mime_type || !isset($allowed_mime_map[$mime_type])) {
+                            continue;
+                        }
+
+                        $new_name = 'img_' . bin2hex(random_bytes(16)) . '.' . $allowed_mime_map[$mime_type];
+                        $destination = $upload_dir . '/' . $new_name;
+
+                        if (move_uploaded_file($tmp_name, $destination)) {
+                            @chmod($destination, 0644);
+
+                            // Kiểm tra xem có ảnh nào không, nếu chưa có thì set là ảnh chính
+                            $img_count_stmt = $pdo->prepare("SELECT COUNT(*) FROM product_images WHERE product_id = ?");
+                            $img_count_stmt->execute([$product_id]);
+                            $is_primary = ((int)$img_count_stmt->fetchColumn() === 0) ? 1 : 0;
+
+                            $image_url = str_replace(ROOT_PATH, '', $destination);
+                            $stmt->execute([$product_id, $image_url, $is_primary]);
+                        }
+                    }
+
+                    if ($finfo) {
+                        finfo_close($finfo);
                     }
                 }
 

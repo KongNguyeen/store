@@ -8,12 +8,19 @@ header('Content-Type: application/json');
 
 $response = ['success' => false, 'message' => ''];
 
-// Lấy dữ liệu từ POST hoặc GET
-$product_id = isset($_POST['id']) ? (int)$_POST['id'] : (isset($_GET['id']) ? (int)$_GET['id'] : 0);
-$csrf_token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    $response['message'] = 'Method not allowed';
+    echo json_encode($response);
+    exit;
+}
+
+// Lấy dữ liệu từ POST
+$product_id = (int)($_POST['id'] ?? 0);
+$csrf_token = $_POST['csrf_token'] ?? '';
 
 // Kiểm tra CSRF token
-if (!isset($_SESSION['csrf_token']) || $csrf_token !== $_SESSION['csrf_token']) {
+if (!verify_csrf_token($csrf_token)) {
     $response['message'] = 'Invalid CSRF token';
     echo json_encode($response);
     exit;
@@ -36,8 +43,9 @@ try {
     $images = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     foreach ($images as $image_url) {
-        if ($image_url && file_exists($image_url)) {
-            @unlink($image_url);
+        $absolute_image_path = ROOT_PATH . ltrim((string)$image_url, '/\\');
+        if ($image_url && file_exists($absolute_image_path)) {
+            @unlink($absolute_image_path);
         }
     }
 
@@ -71,13 +79,7 @@ try {
     // Log error for debugging
     error_log("Product Delete Error: " . $e->getMessage() . " - Product ID: " . $product_id);
     
-    $response['message'] = 'Có lỗi xảy ra khi xóa sản phẩm: ' . $e->getMessage();
-    $response['debug'] = [
-        'product_id' => $product_id,
-        'csrf_token' => substr($csrf_token, 0, 10) . '...',
-        'session_csrf' => isset($_SESSION['csrf_token']) ? substr($_SESSION['csrf_token'], 0, 10) . '...' : null,
-        'error' => $e->getMessage()
-    ];
+    $response['message'] = 'Có lỗi xảy ra khi xóa sản phẩm';
 }
 
 echo json_encode($response);

@@ -3,16 +3,55 @@ require_once 'config/config.php';
 require_once 'config/functions.php';
 require_once 'config/security_config.php';
 
+function sanitize_redirect_target($target, $fallback = 'index.php') {
+    $target = trim((string)$target);
+
+    if ($target === '') {
+        return $fallback;
+    }
+
+    $target = str_replace(["\r", "\n", "\0"], '', $target);
+
+    // Reject absolute/protocol-relative URLs.
+    if (preg_match('/^[a-z][a-z0-9+\-.]*:/i', $target) || strpos($target, '//') === 0) {
+        return $fallback;
+    }
+
+    // Normalize root-based app URLs.
+    if (strpos($target, '/store/') === 0) {
+        $target = substr($target, strlen('/store/'));
+    } elseif (strpos($target, '/') === 0) {
+        $target = ltrim($target, '/');
+    }
+
+    $path = parse_url($target, PHP_URL_PATH);
+    $query = parse_url($target, PHP_URL_QUERY);
+
+    if ($path === false || $path === null || $path === '') {
+        return $fallback;
+    }
+
+    $normalized_path = ltrim($path, '/');
+    if (
+        strpos($normalized_path, '..') !== false ||
+        !preg_match('/^(?:admin\/)?[A-Za-z0-9_\-\/]+\.php$/', $normalized_path)
+    ) {
+        return $fallback;
+    }
+
+    return $normalized_path . ($query ? ('?' . $query) : '');
+}
+
 // Redirect if already logged in
 if (isset($_SESSION['user_id'])) {
-    $redirect = $_SESSION['redirect_url'] ?? 'index.php';
+    $redirect = sanitize_redirect_target($_SESSION['redirect_url'] ?? 'index.php');
     unset($_SESSION['redirect_url']);
     redirect($redirect);
 }
 
 // Store redirect URL from GET parameter
 if (isset($_GET['redirect'])) {
-    $_SESSION['redirect_url'] = $_GET['redirect'];
+    $_SESSION['redirect_url'] = sanitize_redirect_target($_GET['redirect']);
 }
 
 $error = '';
@@ -92,8 +131,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $success = 'Đăng nhập thành công! Chào mừng ' . htmlspecialchars($user['full_name']) . ' trở lại.';
                     
                     // Store redirect URL in session for later use
-                    $_SESSION['post_login_redirect'] = $_SESSION['redirect_url'] ?? 
-                        ($user['role_id'] == 1 ? 'admin/index.php' : 'index.php');
+                    $_SESSION['post_login_redirect'] = sanitize_redirect_target(
+                        $_SESSION['redirect_url'] ?? ($user['role_id'] == 1 ? 'admin/index.php' : 'index.php')
+                    );
                     unset($_SESSION['redirect_url']);
                     
                     // Don't redirect immediately - let JavaScript handle the animation first
@@ -322,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function() {
             successMessage.textContent = 'Đang chuyển hướng...';
             setTimeout(() => {
                 document.body.style.overflow = '';
-                window.location.href = '<?= $_SESSION['post_login_redirect'] ?? 'index.php' ?>';
+                window.location.href = <?= json_encode(sanitize_redirect_target($_SESSION['post_login_redirect'] ?? 'index.php')) ?>;
             }, 1000);
         }, 2500);
     }

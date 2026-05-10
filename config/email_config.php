@@ -9,7 +9,7 @@ define('MAIL_FROM_EMAIL', 'congnbn45@gmail.com'); // Thay bằng email Gmail c�
 define('MAIL_FROM_NAME', 'KongNguyeen Store'); // Tên hiển thị khi gửi email
 
 // Cấu hình để sử dụng email thật hay simulation
-define('USE_REAL_EMAIL', true); // Đặt true để gửi email thật, false để chỉ log
+define('USE_REAL_EMAIL', false); // Đặt false để tránh lỗi gửi email, set true sau khi cấu hình Gmail xong
 
 /* 
 HƯỚNG DẪN THIẾT LẬP GMAIL:

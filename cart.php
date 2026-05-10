@@ -487,18 +487,22 @@ if (isset($_POST['apply_promo']) && isset($_POST['promo_code'])) {
     } else {
         $stmt = $pdo->prepare("
             SELECT * FROM promotions
-            WHERE code = ?
-            AND active = 1
-            AND start_date <= CURDATE()
-            AND end_date >= CURDATE()
+            WHERE promotion_code = ?
+            AND status = 'active'
+            AND start_date <= NOW()
+            AND end_date >= NOW()
         ");
         $stmt->execute([$promo_code]);
         $promo = $stmt->fetch();
         if ($promo) {
             $min_order = isset($promo['min_order_amount']) ? (float)$promo['min_order_amount'] : 0;
-            $discount_percent = isset($promo['discount_percent']) ? (float)$promo['discount_percent'] : 0;
             if ($total >= $min_order) {
-                $discount = round($total * $discount_percent / 100, 2);
+                if (($promo['discount_type'] ?? 'percentage') === 'fixed') {
+                    $discount = min((float)$promo['discount_value'], $total);
+                } else {
+                    $discount_percent = isset($promo['discount_value']) ? (float)$promo['discount_value'] : 0;
+                    $discount = round($total * $discount_percent / 100, 2);
+                }
                 $_SESSION['promo'] = [
                     'code' => $promo_code,
                     'discount' => $discount

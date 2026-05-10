@@ -1,10 +1,11 @@
 <?php
 // Check if constants are not already defined
 if (!defined('DB_HOST')) {
-    // Database configuration
-    define('DB_HOST', 'localhost');
-    define('DB_NAME', 'store');
-    define('DB_USER', 'root');    define('DB_PASS', '');
+    // Database configuration for 42web hosting
+    define('DB_HOST', 'sql303.infinityfree.com');
+    define('DB_NAME', 'if0_41880438_store');
+    define('DB_USER', 'if0_41880438');
+    define('DB_PASS', 'wjHVNy96sKDqCD');
     define('DB_CHARSET', 'utf8mb4');
 }
 

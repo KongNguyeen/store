@@ -67,36 +67,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Tạo thư mục lưu ảnh sản phẩm
                 $upload_dir = PRODUCT_IMG_PATH . $product_id;
                 if (!is_dir($upload_dir)) {
-                    mkdir($upload_dir, 0777, true);
+                        mkdir($upload_dir, 0755, true);
                 }
 
                 // Xử lý upload ảnh
                 if (isset($_FILES['images']) && is_array($_FILES['images']['name'])) {
-                    $stmt = $pdo->prepare("
-                        INSERT INTO product_images (product_id, image_url, is_primary)
-                        VALUES (?, ?, ?)
-                    ");
+                        $allowed_mime_map = [
+                            'image/jpeg' => 'jpg',
+                            'image/png' => 'png',
+                            'image/gif' => 'gif',
+                        ];
+                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+
+                        $stmt = $pdo->prepare("
+                            INSERT INTO product_images (product_id, image_url, is_primary)
+                            VALUES (?, ?, ?)
+                        ");
 
                     foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
-                        if ($_FILES['images']['error'][$key] === UPLOAD_ERR_OK) {
-                            $file_name = $_FILES['images']['name'][$key];
-                            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-                            
-                            // Kiểm tra định dạng file
-                            if (!in_array($file_ext, ['jpg', 'jpeg', 'png', 'gif'])) {
+                            if ($_FILES['images']['error'][$key] !== UPLOAD_ERR_OK) {
                                 continue;
                             }
 
-                            // Tạo tên file mới
-                            $new_name = uniqid() . '.' . $file_ext;
+                            $file_size = (int)($_FILES['images']['size'][$key] ?? 0);
+                            if ($file_size <= 0 || $file_size > MAX_FILE_SIZE || !is_uploaded_file($tmp_name)) {
+                                continue;
+                            }
+
+                            $mime_type = $finfo ? finfo_file($finfo, $tmp_name) : null;
+                            if (!$mime_type || !isset($allowed_mime_map[$mime_type])) {
+                                continue;
+                            }
+
+                            // Tạo tên file ngẫu nhiên để tránh đoán tên và tránh dùng tên gốc.
+                            $new_name = 'img_' . bin2hex(random_bytes(16)) . '.' . $allowed_mime_map[$mime_type];
                             $destination = $upload_dir . '/' . $new_name;
 
                             if (move_uploaded_file($tmp_name, $destination)) {
+                                @chmod($destination, 0644);
+
                                 // Ảnh đầu tiên sẽ là ảnh chính
                                 $is_primary = ($key === 0) ? 1 : 0;
                                 $image_url = str_replace(ROOT_PATH, '', $destination);
                                 $stmt->execute([$product_id, $image_url, $is_primary]);
                             }
+                        }
+
+                        if ($finfo) {
+                            finfo_close($finfo);
                         }
                     }
                 }

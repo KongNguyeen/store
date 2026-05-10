@@ -7,22 +7,16 @@ header('Content-Type: application/json');
 
 $response = ['success' => false, 'message' => ''];
 
-// Debug session
-if (!isset($_SESSION['user_id'])) {
-    $response['message'] = 'User not logged in';
-    $response['debug'] = ['session' => $_SESSION];
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    $response['message'] = 'Method not allowed';
     echo json_encode($response);
     exit;
 }
 
 // Validate CSRF token
-if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || 
-    $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
     $response['message'] = 'Invalid CSRF token';
-    $response['debug'] = [
-        'post_token' => $_POST['csrf_token'] ?? 'not set',
-        'session_token' => $_SESSION['csrf_token'] ?? 'not set'
-    ];
     echo json_encode($response);
     exit;
 }
@@ -167,7 +161,9 @@ try {
 
 } catch (Exception $e) {
     if (isset($pdo)) {
-        $pdo->rollBack();
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
     }
     
     // Log chi tiết lỗi để debug
@@ -176,14 +172,7 @@ try {
     error_log("New Status: " . $new_status);
     error_log("User ID: " . ($_SESSION['user_id'] ?? 'not set'));
     
-    $response['message'] = 'Có lỗi xảy ra: ' . $e->getMessage();
-    $response['debug'] = [
-        'order_id' => $order_id,
-        'status' => $new_status,
-        'user_id' => $_SESSION['user_id'] ?? 'not set',
-        'error' => $e->getMessage(),
-        'trace' => $e->getTraceAsString()
-    ];
+    $response['message'] = 'Có lỗi xảy ra khi cập nhật trạng thái';
 }
 
 echo json_encode($response);
